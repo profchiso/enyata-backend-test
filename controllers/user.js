@@ -83,9 +83,8 @@ exports.deleteUser = async(req, res) => {
             return res.status(404).json({ message: "User not found", statuscode: 404, errors: [{ message: "User not found" }] })
 
         }
-        delete req.body.password
-        const updatedUser = await db.User.destroy(req.body, { where: { id }, returning: true, plain: true })
-        res.status(200).json({ message: `User info updated`, statuscode: 200, data: { user: updatedUser[1] } });
+        await db.User.destroy({ where: { id } })
+        res.status(204).json({ message: `User info deleted`, statuscode: 204, });
 
     } catch (error) {
         console.log(error)
