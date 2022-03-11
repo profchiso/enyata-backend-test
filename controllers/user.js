@@ -73,9 +73,7 @@ exports.updateUser = async(req, res) => {
 
         }
         delete req.body.password
-
         const updatedUser = await db.user.update(req.body, { where: { id }, returning: true, plain: true })
-        console.log(updatedUser)
         res.status(200).json({ message: `User info updated`, statuscode: 200, data: { user: updatedUser[1] } });
 
     } catch (error) {
