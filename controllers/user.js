@@ -4,6 +4,10 @@ const db = require("../models/index")
 
 exports.getSingleUser = async(req, res) => {
         try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errors: errors.array() });
+            }
             const user = await db.user.findOne({ where: req.body || req.query, });
             if (!user) {
                 return res.status(404).json({ message: "User not found", statuscode: 404, });
