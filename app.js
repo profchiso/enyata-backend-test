@@ -3,7 +3,7 @@ const path = require("path");
 const cors = require("cors")
 const { userRouter } = require("./routes/user");
 const { undefinedRouter } = require("./routes/undefinedRoute")
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());

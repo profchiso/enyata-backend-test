@@ -7,8 +7,8 @@ const userRouter = express.Router();
 userRouter.get("/", getAllUser)
 userRouter.get("/:id", getAuser)
 userRouter.post("/", createUserValidation, createUser)
-userRouter.patch("/", updateUser)
-userRouter.delete("/", deleteUser)
+userRouter.patch("/:id", updateUser)
+userRouter.delete("/:id", deleteUser)
 
 
 module.exports = { userRouter };
