@@ -2,33 +2,36 @@ const { validationResult } = require('express-validator');
 const { hashUserPassword } = require("../utils/passwordHashing")
 const db = require("../models/index")
 
-exports.getAllUser = async(req, res) => {
-    try {
-        const users = await db.User.findAll({ where: req.query, });
-        res.status(200).json({ message: "Users Fetched", statuscode: 200, data: { users } });
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: "Something went wrong", statuscode: 500, errors: [{ message: error.message || "internal server error" }] })
-
-    }
-}
-exports.getAuser = async(req, res) => {
-    try {
-
-        const { id } = req.params;
-        const user = await db.User.findOne({ where: { id } });
-        if (!user) {
-            return res.status(404).json({ message: "User not found", statuscode: 404, });
+exports.getSingleUser = async(req, res) => {
+        try {
+            const user = await db.User.findOne({ where: req.body || req.query, });
+            if (!user) {
+                return res.status(404).json({ message: "User not found", statuscode: 404, });
+            }
+            res.status(200).json({ message: "User Fetched", statuscode: 200, data: { user } });
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ message: "Something went wrong", statuscode: 500, errors: [{ message: error.message || "internal server error" }] })
 
         }
-
-        res.status(200).json({ message: "User Fetched", statuscode: 200, data: { user } });
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: "Something went wrong", statuscode: 500, errors: [{ message: error.message || "internal server error" }] })
-
     }
-}
+    // exports.getAuser = async(req, res) => {
+    //     try {
+
+//         const { id } = req.params;
+//         const user = await db.User.findOne({ where: { id } });
+//         if (!user) {
+//             return res.status(404).json({ message: "User not found", statuscode: 404, });
+
+//         }
+
+//         res.status(200).json({ message: "User Fetched", statuscode: 200, data: { user } });
+//     } catch (error) {
+//         console.log(error)
+//         res.status(500).json({ message: "Something went wrong", statuscode: 500, errors: [{ message: error.message || "internal server error" }] })
+
+//     }
+// }
 exports.createUser = async(req, res) => {
     try {
         const errors = validationResult(req);
@@ -37,7 +40,7 @@ exports.createUser = async(req, res) => {
         }
         const { name, email, password } = req.body
 
-        let hashedPassword = await hashUserPassword(password)
+        // let hashedPassword = await hashUserPassword(password)
 
 
         const existingUser = await db.User.findOne({ where: { email } });
@@ -46,7 +49,7 @@ exports.createUser = async(req, res) => {
             return res.status(400).json({ message: `Email already in use`, statuscode: 400, errors: [{ message: `Email already in use` }] });
 
         }
-        const createdUser = await db.User.create({ name, email, password: hashedPassword });
+        const createdUser = await db.User.create({ name, email, password });
         console.log(createdUser)
         res.status(201).send({ message: "User created", statuscode: 201, data: { user: createdUser } });
 

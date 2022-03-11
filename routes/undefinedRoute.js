@@ -1,7 +1,7 @@
 const express = require("express");
 const undefinedRouter = express.Router();
 
-router.all("*", (req, res) => {
+undefinedRouter.all("*", (req, res) => {
 
 
     res.status(404).json({
