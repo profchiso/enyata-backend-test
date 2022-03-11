@@ -14,6 +14,8 @@ const createUserValidation = [
 
     body('password')
     .trim()
+    .notEmpty()
+    .withMessage("Password field is required")
     .isLength({ min: 2, max: 20 })
     .withMessage('Password must be between 2 and 20 characters'),
 ]
